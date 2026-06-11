@@ -3,13 +3,46 @@
 import { useEffect, useState } from 'react';
 import { CurrentWeatherResponse } from '@/lib/types/weather.types';
 
-export default function LocationWeather() {
+export default function LocationWeather({
+  lat: latProp,
+  lon: lonProp,
+}: {
+  lat?: number | string;
+  lon?: number | string;
+}) {
   const [data, setData] = useState<CurrentWeatherResponse>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
   const K = 273.15;
 
   useEffect(() => {
+    if (latProp != null && lonProp != null) {
+      const controller = new AbortController();
+      (async () => {
+        try {
+          const res = await fetch(
+            `/api/weather?lat=${latProp}&lon=${lonProp}`,
+            { cache: 'no-store', signal: controller.signal }
+          );
+          if (!res.ok) {
+            throw new Error(`Server responded with ${res.status}`);
+          }
+          const result = await res.json();
+          setData(result);
+        } catch (err) {
+          if (controller.signal.aborted) {
+            return;
+          }
+          setError(`Failed to fetch weather: ${err}`);
+        } finally {
+          if (!controller.signal.aborted) {
+            setLoading(false);
+          }
+        }
+      })();
+      return () => controller.abort();
+    }
+
     if (!('geolocation' in navigator)) {
       return;
     }
@@ -31,6 +64,7 @@ export default function LocationWeather() {
           setLoading(false);
         } catch (err) {
           setError(`Failed to fetch weather: ${err}`);
+        } finally {
           setLoading(false);
         }
       },
@@ -39,7 +73,7 @@ export default function LocationWeather() {
         setLoading(false);
       }
     );
-  }, []);
+  }, [latProp, lonProp]);
 
   if (!('geolocation' in navigator)) {
     return <p>Geolocation is not supported in this browser.</p>;
