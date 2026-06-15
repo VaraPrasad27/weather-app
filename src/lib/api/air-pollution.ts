@@ -13,5 +13,5 @@ export default async function fetchAirPollution(
     );
   }
 
-  return res.json() as Promise<AirPollutionResponse>;
+  return (await res.json()) as AirPollutionResponse;
 }

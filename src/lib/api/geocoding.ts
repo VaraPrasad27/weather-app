@@ -13,5 +13,5 @@ export default async function fetchGeocode(
     );
   }
 
-  return res.json() as Promise<GeocodingResponse>;
+  return (await res.json()) as GeocodingResponse;
 }

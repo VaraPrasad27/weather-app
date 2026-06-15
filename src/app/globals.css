@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-surface: #0b1220;
+  --color-surface-2: #111a2e;
+  --color-surface-3: #1a2440;
+  --color-border: #243049;
+  --color-muted: #8a96b3;
+  --color-text: #e6ecf7;
+
+  --color-brand-50: #eaf2ff;
+  --color-brand-200: #b8d1ff;
+  --color-brand-400: #6ea1ff;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+html,
+body {
+  background:
+    radial-gradient(
+      1200px 600px at 80% -10%,
+      rgba(59, 130, 246, 0.18),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at -10% 110%,
+      rgba(99, 102, 241, 0.12),
+      transparent 60%
+    ),
+    var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.45);
+  color: #fff;
+}
+
+/* Skeleton shimmer used while loading */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-2) 0%,
+    var(--color-surface-3) 50%,
+    var(--color-surface-2) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 0.5rem;
+}
